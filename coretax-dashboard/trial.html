@@ -19,7 +19,6 @@
   .field label{display:block;font-size:.82rem;font-weight:800;color:var(--ink);margin-bottom:8px}
   .field input{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--paper-soft);color:var(--ink);font-size:.92rem;font-family:inherit;transition:.15s}
   .field input:focus{outline:none;border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(37,99,235,.1)}
-  .field input:read-only{background:var(--bg);color:var(--muted);cursor:not-allowed}
   .field .hint{font-size:.74rem;color:var(--muted);margin-top:6px;line-height:1.5}
   .btn-primary{width:100%;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--blue-2),var(--navy));color:#fff;font-weight:900;font-size:1rem;cursor:pointer;transition:.2s}
   .btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 20px rgba(37,99,235,.25)}
@@ -29,8 +28,10 @@
   .success h3{color:#059669;font-size:1.05rem;font-weight:900;margin:0 0 10px}
   .success p{margin:0 0 14px;color:#047857;font-size:.86rem;line-height:1.5}
   .license-box{background:#fff;border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:12px;font-family:Consolas,monospace;font-size:.72rem;word-break:break-all;color:#065f46;line-height:1.5;margin-bottom:12px;user-select:all;max-height:120px;overflow-y:auto}
-  .copy-btn{padding:10px 16px;border:0;border-radius:10px;background:#059669;color:#fff;font-weight:800;font-size:.82rem;cursor:pointer;width:100%}
+  .copy-btn{padding:10px 16px;border:0;border-radius:10px;background:#059669;color:#fff;font-weight:800;font-size:.82rem;cursor:pointer;width:100%;margin-bottom:10px}
   .copy-btn:hover{background:#047857}
+  .download-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:linear-gradient(135deg,#1e40af,#1d4ed8);color:#fff;border-radius:12px;font-weight:800;font-size:.92rem;text-decoration:none;margin-bottom:10px}
+  .download-btn:hover{opacity:.92}
   .steps-next{background:var(--paper-soft);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:14px;font-size:.82rem;line-height:1.7;color:var(--text)}
   .steps-next b{color:var(--ink)}
   .footer-note{text-align:center;font-size:.78rem;color:var(--muted);margin-top:20px;line-height:1.5}
@@ -44,7 +45,7 @@
 
     <div class="trial-header">
       <div class="logo" id="toolLogo">CT</div>
-      <span class="trial-badge">🚀 3 Hari Gratis</span>
+      <span class="trial-badge">3 Hari Gratis</span>
       <h1 id="toolName">Coba Coretax Toolkit</h1>
       <p id="toolDesc">Aktivasi trial tanpa kartu kredit. Langsung pakai.</p>
     </div>
@@ -61,16 +62,8 @@
         <div class="hint">Kami tidak akan spam. Hanya kirim info update produk.</div>
       </div>
 
-      <div class="field">
-        <label>Machine ID</label>
-        <input type="text" id="machineId" placeholder="Copy dari extension Chrome" required />
-        <div class="hint">
-          Buka extension <b>Coretax PDF Toolkit</b> di Chrome → Copy Machine ID → paste di sini.
-        </div>
-      </div>
-
       <button type="submit" class="btn-primary" id="submitBtn">
-        🚀 Mulai Trial 3 Hari
+        Mulai Trial 3 Hari
       </button>
     </form>
 
@@ -78,24 +71,24 @@
 
     <div id="success" class="hidden">
       <div class="success">
-        <h3>✅ Trial Aktif!</h3>
+        <h3>Trial Aktif!</h3>
         <p>License trial kamu sudah siap. Copy dan paste di extension:</p>
         <div class="license-box" id="licenseKey"></div>
-        <button class="copy-btn" id="copyBtn">📋 Copy License Key</button>
+        <button class="copy-btn" id="copyBtn">Copy License Key</button>
 
-        <a href="CoretaxPDFToolkit-Trial.zip" download class="btn-primary" style="margin-bottom:12px;background:linear-gradient(135deg,#059669,#047857);text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;">
-          📥 Download Extension (Trial)
+        <a href="CoretaxPDFToolkit-Trial.zip" download class="download-btn">
+          Download Extension (Trial)
         </a>
 
         <div class="steps-next">
           <b>Langkah selanjutnya:</b><br>
-          1. Klik tombol <b>Download Extension (Trial)</b> di atas<br>
+          1. Klik <b>Download Extension (Trial)</b> di atas<br>
           2. Extract file ZIP<br>
           3. Buka <b>chrome://extensions</b> → aktifkan <b>Developer mode</b><br>
           4. Klik <b>Load unpacked</b> → pilih folder hasil extract<br>
-          5. Klik icon extension → paste license trial → klik Activate<br>
-          6. Buka Coretax → panel muncul Dihalaman Efaktur dan Bukti potong saya</b><br>
-          7. Versi triak memiliki batasan tertentu, gunakan lisence aktif untuk pengalaman lebih baik</b><br>
+          5. Klik icon extension → paste License Key → klik <b>Activate</b><br>
+          6. Buka Coretax → panel trial muncul<br>
+          <b>Sesi trial: 5 menit &amp; max 5 PDF per halaman.</b>
         </div>
       </div>
     </div>
@@ -109,13 +102,9 @@
 
 <script src="app.js"></script>
 <script>
-  // Auto-fill machine ID dari query param
   const params = new URLSearchParams(location.search);
   const toolId = params.get('tool') || 'coretax-toolkit';
-  const midFromExt = params.get('mid');
-  if (midFromExt) document.getElementById('machineId').value = midFromExt;
 
-  // Set tool name display
   const toolNames = {
     'coretax-toolkit': { name: 'Coretax Toolkit', logo: 'CT', desc: 'Bulk download Faktur Pajak, Bukti Potong Coretax' }
   };
@@ -128,7 +117,6 @@
     e.preventDefault();
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
-    const machineId = document.getElementById('machineId').value.trim();
     const btn = document.getElementById('submitBtn');
     const err = document.getElementById('error');
     const success = document.getElementById('success');
@@ -136,7 +124,7 @@
     err.classList.add('hidden');
     success.classList.add('hidden');
     btn.disabled = true;
-    btn.textContent = '⏳ Memproses...';
+    btn.textContent = 'Memproses...';
 
     try {
       const res = await fetch(API_URL + '/api/trial/start', {
@@ -145,8 +133,7 @@
         body: JSON.stringify({
           email: email,
           name: name,
-          tool: toolId,
-          machine_id: machineId
+          tool: toolId
         })
       });
       const data = await res.json();
@@ -164,16 +151,16 @@
       err.classList.remove('hidden');
     } finally {
       btn.disabled = false;
-      btn.textContent = '🚀 Mulai Trial 3 Hari';
+      btn.textContent = 'Mulai Trial 3 Hari';
     }
   });
 
   document.getElementById('copyBtn').addEventListener('click', async () => {
     const key = document.getElementById('licenseKey').textContent;
     await navigator.clipboard.writeText(key);
-    document.getElementById('copyBtn').textContent = '✅ Tersalin!';
+    document.getElementById('copyBtn').textContent = 'Tersalin!';
     setTimeout(() => {
-      document.getElementById('copyBtn').textContent = '📋 Copy License Key';
+      document.getElementById('copyBtn').textContent = 'Copy License Key';
     }, 1500);
   });
 </script>
