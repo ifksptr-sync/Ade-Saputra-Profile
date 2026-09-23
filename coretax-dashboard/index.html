@@ -115,7 +115,14 @@
   });
   (async () => {
     try {
-            // Set download link berdasarkan tier
+      const me = await apiGet('/api/me');
+      document.getElementById('infoMachine').textContent = me.machine_id || '-';
+      document.getElementById('infoIssued').textContent = fmtDate(me.issued_at);
+      document.getElementById('infoExpires').textContent = fmtDate(me.expires_at);
+      document.getElementById('infoStatus').textContent = me.is_active ? 'Aktif' : 'Nonaktif';
+      document.getElementById('tierBadge').textContent = (me.tier || 'pro').toUpperCase();
+
+      // Set download link berdasarkan tier (SETELAH me didefinisikan)
       const tier = (me.tier || 'pro').toLowerCase();
       const dlLink = document.getElementById('downloadLink');
       const dlText = document.getElementById('downloadLinkText');
@@ -132,12 +139,7 @@
         dlText.textContent = 'Download Extension (Full)';
         dlDesc.innerHTML = 'Extension Chrome untuk bulk download Faktur Pajak & Bukti Potong. <b style="color:#86efac;">Unlimited, no session limit.</b>';
       }
-      const me = await apiGet('/api/me');
-      document.getElementById('infoMachine').textContent = me.machine_id || '-';
-      document.getElementById('infoIssued').textContent = fmtDate(me.issued_at);
-      document.getElementById('infoExpires').textContent = fmtDate(me.expires_at);
-      document.getElementById('infoStatus').textContent = me.is_active ? 'Aktif' : 'Nonaktif';
-      document.getElementById('tierBadge').textContent = (me.tier || 'pro').toUpperCase();
+
       const usage = await apiGet('/api/usage');
       document.getElementById('statTotal').textContent = usage.total_downloads || 0;
       document.getElementById('statRecent').textContent = usage.last_30_days || 0;
