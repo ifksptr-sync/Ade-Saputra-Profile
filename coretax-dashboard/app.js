@@ -1,4 +1,4 @@
-const API_URL = "https://coretax-backend-production.up.railway.app/";
+const API_URL = "https://coretax-backend-production.up.railway.app";
 
 async function apiLogin(licenseKey, machineId) {
   const res = await fetch(API_URL + '/api/auth/login', {
