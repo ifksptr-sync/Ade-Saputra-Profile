@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login — Coretax Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo">CT</div>
+      <h1>Coretax Toolkit</h1>
+      <p class="muted">Masuk ke dashboard Anda</p>
+    </div>
+    <form id="loginForm">
+      <label>
+        <span>License Key</span>
+        <input type="text" id="licenseKey" placeholder="eyJtIjoi..." required autocomplete="off" />
+      </label>
+      <label>
+        <span>Machine ID</span>
+        <input type="text" id="machineId" placeholder="Klik copy dari extension" required />
+      </label>
+      <button type="submit" id="loginBtn">Masuk</button>
+    </form>
+    <div id="error" class="error hidden"></div>
+    <div class="hint">
+      Belum punya license? Hubungi <a href="mailto:adesaputra.accflow@gmail.com">adesaputra.accflow@gmail.com</a>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const mid = params.get('mid');
+  if (mid) document.getElementById('machineId').value = mid;
+  const savedKey = localStorage.getItem('license_key');
+  if (savedKey) document.getElementById('licenseKey').value = savedKey;
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const key = document.getElementById('licenseKey').value.trim();
+    const mid2 = document.getElementById('machineId').value.trim();
+    const btn = document.getElementById('loginBtn');
+    const err = document.getElementById('error');
+    err.classList.add('hidden');
+    btn.disabled = true;
+    btn.textContent = 'Memverifikasi...';
+    try {
+      const res = await apiLogin(key, mid2);
+      if (res.success) {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('license_key', key);
+        localStorage.setItem('tier', res.tier);
+        localStorage.setItem('expires_at', res.expires_at);
+        window.location.href = 'index.html';
+      } else {
+        err.textContent = res.error || 'Login gagal';
+        err.classList.remove('hidden');
+      }
+    } catch (ex) {
+      err.textContent = 'Error: ' + ex.message;
+      err.classList.remove('hidden');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Masuk';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard — Coretax Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="logo">CT</div>
+      <span>Coretax Toolkit</span>
+    </div>
+    <div class="nav-actions">
+      <button id="themeToggle" class="icon-btn" title="Toggle theme">🌙</button>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+    </div>
+  </div>
+</nav>
+<main class="container">
+  <header class="page-header">
+    <h1>Dashboard</h1>
+    <p class="muted">Ringkasan aktivitas Coretax PDF Toolkit</p>
+  </header>
+  <section class="card license-card">
+    <div class="card-header">
+      <h2>License Anda</h2>
+      <span id="tierBadge" class="badge">-</span>
+    </div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="muted">Machine ID</span>
+        <code id="infoMachine">-</code>
+      </div>
+      <div class="info-item">
+        <span class="muted">Issued</span>
+        <strong id="infoIssued">-</strong>
+      </div>
+      <div class="info-item">
+        <span class="muted">Expired</span>
+        <strong id="infoExpires">-</strong>
+      </div>
+      <div class="info-item">
+        <span class="muted">Status</span>
+        <strong id="infoStatus">-</strong>
+      </div>
+    </div>
+  </section>
+  <section class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-label">Total Download</span>
+      <strong class="stat-value" id="statTotal">0</strong>
+      <span class="muted">PDF berhasil diunduh</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">30 Hari Terakhir</span>
+      <strong class="stat-value" id="statRecent">0</strong>
+      <span class="muted">Aktivitas terkini</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Total Login</span>
+      <strong class="stat-value" id="statLogins">0</strong>
+      <span class="muted">Sesi dashboard</span>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Mulai Menggunakan</h2>
+    <ol class="steps">
+      <li>Pastikan extension <b>Coretax PDF Toolkit</b> sudah terinstall di Chrome</li>
+      <li>Login ke Coretax seperti biasa</li>
+      <li>Buka halaman <b>Faktur Pajak Keluaran</b> atau <b>My Withholding Slips</b></li>
+      <li>Panel akan muncul otomatis di kanan atas</li>
+      <li>Klik <b>Download All</b> untuk bulk download</li>
+    </ol>
+  </section>
+  <section class="card help-card">
+    <h2>Butuh Bantuan?</h2>
+    <p class="muted">Hubungi kami jika ada kendala atau pertanyaan.</p>
+    <div class="help-actions">
+      <a class="btn btn-primary" href="mailto:adesaputra.accflow@gmail.com">Email Support</a>
+      <a class="btn btn-ghost" href="https://wa.me/6287888370395" target="_blank">WhatsApp</a>
+    </div>
+  </section>
+</main>
+<script src="app.js"></script>
+<script>
+  if (!localStorage.getItem('token')) {
+    window.location.href = 'login.html';
+  }
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('license_key');
+    window.location.href = 'login.html';
+  });
+  const themeBtn = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  html.setAttribute('data-theme', savedTheme);
+  themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+  themeBtn.addEventListener('click', () => {
+    const cur = html.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+  });
+  (async () => {
+    try {
+      const me = await apiGet('/api/me');
+      document.getElementById('infoMachine').textContent = me.machine_id || '-';
+      document.getElementById('infoIssued').textContent = fmtDate(me.issued_at);
+      document.getElementById('infoExpires').textContent = fmtDate(me.expires_at);
+      document.getElementById('infoStatus').textContent = me.is_active ? 'Aktif' : 'Nonaktif';
+      document.getElementById('tierBadge').textContent = (me.tier || 'pro').toUpperCase();
+      const usage = await apiGet('/api/usage');
+      document.getElementById('statTotal').textContent = usage.total_downloads || 0;
+      document.getElementById('statRecent').textContent = usage.last_30_days || 0;
+      document.getElementById('statLogins').textContent = usage.logins || 0;
+    } catch (e) {
+      console.error(e);
+      if (String(e.message).includes('401')) {
+        localStorage.clear();
+        window.location.href = 'login.html';
+      }
+    }
+  })();
+  function fmtDate(s) {
+    if (!s) return '-';
+    try {
+      return new Date(s).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+    } catch { return s; }
+  }
+</script>
+</body>
+</html>
