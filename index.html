@@ -147,10 +147,23 @@
     .thesis-card h1{font-size:clamp(2.75rem,5.2vw,6.3rem);max-width:920px}
     .thesis-card .statement{position:relative;z-index:1;margin-top:28px;font-size:1.15rem;line-height:1.9;color:var(--text);max-width:820px}
     .hero-actions{position:relative;z-index:1;margin-top:30px;display:flex;flex-wrap:wrap;gap:12px}
-    .memory-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .memory-item{padding:20px;border-radius:22px;background:var(--paper);border:1px solid var(--line);box-shadow:0 12px 32px rgba(15,23,42,.05)}
-    .memory-item small{display:block;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:900;font-size:.64rem}
-    .memory-item b{display:block;margin-top:10px;color:var(--ink);font-size:1rem;line-height:1.35}
+
+    .product-showcase{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .product-mini-card{padding:18px;border-radius:22px;background:var(--paper);border:1px solid var(--line);box-shadow:0 12px 32px rgba(15,23,42,.05);transition:.22s ease;cursor:pointer;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;text-decoration:none;color:inherit}
+    .product-mini-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:rgba(37,99,235,.32)}
+    .product-mini-card:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+    .product-mini-soon{cursor:not-allowed;opacity:.7}
+    .product-mini-soon:hover{transform:none;box-shadow:0 12px 32px rgba(15,23,42,.05);border-color:var(--line)}
+    .product-mini-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+    .product-mini-icon{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--blue-2));display:grid;place-items:center;color:#fff;font-size:14px;flex:0 0 auto}
+    .product-mini-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;font-size:.58rem;font-weight:900;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+    .product-mini-badge-available{background:rgba(16,185,129,.12);color:#059669}
+    .product-mini-badge-soon{background:rgba(107,114,128,.12);color:#6b7280}
+    .product-mini-title{font-size:.9rem;font-weight:950;color:var(--ink);letter-spacing:-.02em;margin:0;line-height:1.25}
+    .product-mini-desc{font-size:.75rem;color:var(--muted);line-height:1.5;margin:0;flex:1}
+    .product-mini-cta{font-size:.72rem;font-weight:800;color:var(--blue);display:flex;align-items:center;gap:5px;margin-top:auto;padding-top:6px;border-top:1px solid var(--line)}
+    .product-mini-cta-disabled{color:var(--muted)}
+
     .executive-note{border-radius:var(--radius);padding:24px;background:linear-gradient(135deg,rgba(29,78,216,.10),rgba(14,165,233,.06));border:1px solid rgba(37,99,235,.16);display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
     .executive-note .note-icon{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--blue-2),#1e40af)}
 
@@ -298,15 +311,6 @@
     .cv-document p{font-size:13px;margin:7px 0;color:#1f2937}
     .cv-document ul{margin:7px 0 0 18px;padding:0}.cv-document li{font-size:13px;margin:4px 0;color:#1f2937}
     .cv-document.ats{font-family:Arial,Helvetica,sans-serif;border-radius:0;box-shadow:none;border:1px solid #d1d5db}.cv-document.ats h1{font-size:25px}.cv-document.ats h2{font-size:11px;margin-top:16px}.cv-document.ats p,.cv-document.ats li{font-size:12px;line-height:1.42}
-    .cv-document.executive{font-family:'Inter',Arial,sans-serif;border-radius:26px;border:1px solid #dbeafe;padding:0;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);box-shadow:0 24px 70px rgba(15,23,42,.16)}
-    .cv-document.executive h1{padding:34px 38px 0;font-size:34px;letter-spacing:-.06em;color:#0f172a}
-    .cv-document.executive .cv-role{padding:0 38px;margin-top:10px;color:#1d4ed8;font-size:14px;letter-spacing:.02em}
-    .cv-document.executive .cv-meta{padding:0 38px 24px;border-bottom:1px solid #dbeafe;color:#64748b}
-    .cv-document.executive > p{margin:24px 38px 4px;padding:18px 20px;border-radius:18px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e293b}
-    .cv-document.executive section{margin:18px 38px;padding:18px 20px;border:1px solid #e2e8f0;border-radius:18px;background:#fff;box-shadow:0 10px 28px rgba(15,23,42,.05)}
-    .cv-document.executive h2{border-top:0;padding-top:0;margin:0 0 10px;color:#0f172a;font-size:12px;letter-spacing:.14em}
-    .cv-document.executive p,.cv-document.executive li{font-size:13px;color:#334155;line-height:1.55}
-    .cv-document.executive section:last-child{margin-bottom:34px}
     .cv-close{width:40px;height:40px;border-radius:14px;border:1px solid var(--line);background:var(--paper);color:var(--ink);display:grid;place-items:center;cursor:pointer}
     .cv-close:hover{color:var(--blue);border-color:rgba(37,99,235,.35)}
     body.cv-locked{overflow:hidden}
@@ -337,7 +341,7 @@
     @media (max-width:760px){
       .container-xl{padding-inline:18px}.section{padding:76px 0}.section.compact{padding:64px 0}
       .hero{padding-top:92px}.thesis-card,.identity-card,.contact-card{border-radius:28px;padding:24px}
-      .memory-strip,.principles,.panel-grid,.case-grid,.contribution-grid,.workflow-track,.tab-list,.strength-grid{grid-template-columns:1fr}
+      .product-showcase,.principles,.panel-grid,.case-grid,.contribution-grid,.workflow-track,.tab-list,.strength-grid{grid-template-columns:1fr}
       .metric-grid{grid-template-columns:repeat(2,1fr)}
       .case-row{grid-template-columns:1fr;gap:4px}
       .matrix-row,.tool-row{grid-template-columns:1fr}
@@ -346,36 +350,8 @@
       .hero-actions,.nav-actions{gap:6px}.btn{width:100%;white-space:normal}.nav-actions .btn{display:none}
     }
     @media (prefers-reduced-motion: reduce){
-      html{scroll-behavior:auto}.reveal,.card-lift,.tab-btn,.case-card,.btn{transition:none!important}.reveal{opacity:1;transform:none}
+      html{scroll-behavior:auto}.reveal,.card-lift,.tab-btn,.case-card,.btn,.product-mini-card{transition:none!important}.reveal{opacity:1;transform:none}
     }
-
-    /* ========== PRODUCTS / TOOLS SECTION ========== */
-    .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
-    .product-card{padding:28px;border-radius:26px;background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow-soft);display:flex;flex-direction:column;gap:14px;transition:.22s ease;position:relative}
-    .product-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:rgba(37,99,235,.28)}
-    .product-card.product-card-soon{opacity:.75}
-    .product-card.product-card-soon:hover{transform:none;box-shadow:var(--shadow-soft)}
-    .product-icon{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,var(--navy),var(--blue-2));display:grid;place-items:center;color:#fff;font-size:22px;margin-bottom:6px}
-    .product-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:.7rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;width:fit-content}
-    .product-badge-available{background:rgba(16,185,129,.12);color:#059669}
-    .product-badge-soon{background:rgba(107,114,128,.12);color:#6b7280}
-    .product-card h3{font-size:1.25rem;font-weight:950;color:var(--ink);letter-spacing:-.03em;margin:0;line-height:1.25}
-    .product-card > p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.65}
-    .product-features{list-style:none;padding:0;margin:0;display:grid;gap:6px}
-    .product-features li{font-size:.86rem;color:var(--text);line-height:1.55}
-    .product-actions{display:flex;gap:10px;margin-top:auto;padding-top:8px}
-    .product-actions .btn{flex:1;justify-content:center;font-size:.85rem;padding:.72rem 1rem;text-decoration:none}
-    .product-actions .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
-    .product-actions .btn:disabled:hover{transform:none}
-    .product-info{margin-top:32px;padding:32px;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;box-shadow:0 24px 62px rgba(15,23,42,.22);position:relative;overflow:hidden}
-    .product-info::before{content:"";position:absolute;right:-120px;top:-140px;width:340px;height:340px;border-radius:999px;background:radial-gradient(circle,rgba(37,99,235,.35),transparent 70%)}
-    .product-info h3{position:relative;z-index:1;font-size:clamp(1.5rem,2.5vw,2.2rem);color:#fff;font-weight:950;letter-spacing:-.03em;margin:0 0 20px}
-    .product-info-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .product-info-item{padding:20px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(10px)}
-    .product-info-item i{font-size:1.4rem;color:#93c5fd;margin-bottom:10px;display:block}
-    .product-info-item h4{font-size:1rem;color:#fff;font-weight:950;margin:0 0 6px}
-    .product-info-item p{font-size:.82rem;color:#cbd5e1;line-height:1.6;margin:0}
-    @media (max-width:760px){.product-info-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body data-lang="id">
@@ -389,7 +365,6 @@
         <a href="#workflow"><span class="id">Sistem Kerja</span><span class="en">Work System</span></a>
         <a href="#expertise">Expertise</a>
         <a href="#cases"><span class="id">Studi Kasus</span><span class="en">Case Studies</span></a>
-        <a href="#products"><span class="id">Tools</span><span class="en">Tools</span></a>
         <a href="#tax"><span class="id">Pajak & Improvement</span><span class="en">Tax & Improvement</span></a>
         <a href="#contact">Contact</a>
       </div>
@@ -405,7 +380,6 @@
       <a href="#workflow"><span class="id">Sistem Kerja</span><span class="en">Work System</span></a>
       <a href="#expertise">Core Expertise</a>
       <a href="#cases"><span class="id">Studi Kasus</span><span class="en">Case Studies</span></a>
-      <a href="#products">Tools</a>
       <a href="#tax"><span class="id">Pajak & Improvement</span><span class="en">Tax & Improvement</span></a>
       <a href="#contact">Contact</a>
       <button data-open-cv="default"><i class="fa-solid fa-file-lines mr-2"></i><span class="id">Buka CV</span><span class="en">Open CV</span></button>
@@ -462,10 +436,36 @@
             </div>
           </div>
 
-          <div class="memory-strip reveal" aria-label="What recruiters should remember">
-            <article class="memory-item"><small><span class="id">Kualitas Laporan</span><span class="en">Reporting Quality</span></small><b><span class="id">Fokus pada angka yang akurat, jelas, dan siap direview.</span><span class="en">Focuses on figures that are accurate, clear, and review-ready.</span></b></article>
-            <article class="memory-item"><small><span class="id">Accounting-to-Tax</span><span class="en">Accounting-to-Tax</span></small><b><span class="id">Membaca dampak pencatatan terhadap posisi fiskal dan dokumentasi pajak.</span><span class="en">Reads the impact of recording on fiscal position and tax documentation.</span></b></article>
-            <article class="memory-item"><small><span class="id">Cara Kerja</span><span class="en">Work Logic</span></small><b><span class="id">Berpikir struktural, menjaga traceability, dan memperbaiki proses.</span><span class="en">Thinks structurally, preserves traceability, and improves process.</span></b></article>
+          <div class="product-showcase reveal" aria-label="Tools & Products">
+            <a class="product-mini-card" href="coretax-dashboard/trial.html?tool=coretax-toolkit" aria-label="Coba Coretax PDF Toolkit gratis 7 hari">
+              <div class="product-mini-header">
+                <div class="product-mini-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                <span class="product-mini-badge product-mini-badge-available">● Tersedia</span>
+              </div>
+              <h3 class="product-mini-title">Coretax PDF Toolkit</h3>
+              <p class="product-mini-desc"><span class="id">Bulk download Faktur Pajak & Bukti Potong dalam 1 klik.</span><span class="en">Bulk download Tax Invoices & Withholding Slips in 1 click.</span></p>
+              <div class="product-mini-cta"><i class="fa-solid fa-rocket"></i><span class="id">Coba Gratis 7 Hari</span><span class="en">Start Free Trial</span></div>
+            </a>
+
+            <div class="product-mini-card product-mini-soon" aria-label="Segera hadir: e-Bupot Recap Toolkit">
+              <div class="product-mini-header">
+                <div class="product-mini-icon"><i class="fa-solid fa-receipt"></i></div>
+                <span class="product-mini-badge product-mini-badge-soon">● Segera</span>
+              </div>
+              <h3 class="product-mini-title">e-Bupot Recap Toolkit</h3>
+              <p class="product-mini-desc"><span class="id">Auto-rekap Bukti Potong dari banyak PDF.</span><span class="en">Auto-recap Withholding Certificates from PDFs.</span></p>
+              <div class="product-mini-cta product-mini-cta-disabled"><i class="fa-solid fa-clock"></i> Coming Soon</div>
+            </div>
+
+            <div class="product-mini-card product-mini-soon" aria-label="Segera hadir: GL to Trial Balance">
+              <div class="product-mini-header">
+                <div class="product-mini-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <span class="product-mini-badge product-mini-badge-soon">● Segera</span>
+              </div>
+              <h3 class="product-mini-title">GL to Trial Balance</h3>
+              <p class="product-mini-desc"><span class="id">Konversi GL ke Trial Balance otomatis.</span><span class="en">Automated GL to Trial Balance conversion.</span></p>
+              <div class="product-mini-cta product-mini-cta-disabled"><i class="fa-solid fa-clock"></i> Coming Soon</div>
+            </div>
           </div>
 
           <div class="executive-note reveal">
@@ -483,7 +483,7 @@
       <div class="container-xl">
         <div class="philosophy-grid">
           <div class="quote-card reveal">
-            <span class="quote-mark">"</span>
+            <span class="quote-mark">“</span>
             <h2 class="display section-title" id="philosophy-title">
               <span class="id">Accounting bukan hanya mencatat transaksi.</span>
               <span class="en">Accounting is not merely recording transactions.</span>
@@ -561,7 +561,6 @@
             <button class="tab-btn" data-tab="tax" role="tab"><strong>Strong Tax Perspective</strong><span><span class="id">Menghubungkan accounting dengan posisi fiskal.</span><span class="en">Connect accounting with fiscal position.</span></span></button>
             <button class="tab-btn" data-tab="improvement" role="tab"><strong>Process Improvement</strong><span><span class="id">Merapikan workflow, template, dan traceability.</span><span class="en">Improve workflow, templates, and traceability.</span></span></button>
           </div>
-
           <div class="reveal">
             <article class="tab-panel active" data-panel="reporting" role="tabpanel">
               <p class="eyebrow">Accounting Specialist</p>
@@ -852,111 +851,6 @@
       </div>
     </section>
 
-    <!-- 11.5 Tools & Products -->
-    <section class="section" id="products" aria-labelledby="products-title">
-      <div class="container-xl">
-        <div class="mb-12">
-          <p class="eyebrow reveal"><span class="id">Tools & Products</span><span class="en">Tools & Products</span></p>
-          <h2 class="display section-title reveal" id="products-title">
-            <span class="id">Tools otomasi untuk mempercepat pekerjaan accounting & tax.</span>
-            <span class="en">Automation tools to accelerate accounting & tax work.</span>
-          </h2>
-          <p class="section-lead reveal">
-            <span class="id">Kumpulan tools yang saya bangun untuk mengurangi pekerjaan repetitif. Coba gratis 7 hari, tanpa kartu kredit.</span>
-            <span class="en">A collection of tools I built to reduce repetitive work. Try free 7 days, no credit card.</span>
-          </p>
-        </div>
-
-        <div class="product-grid">
-          <!-- Coretax PDF Toolkit -->
-          <article class="product-card reveal">
-            <div class="product-icon"><i class="fa-solid fa-file-invoice"></i></div>
-            <span class="product-badge product-badge-available">● Tersedia</span>
-            <h3>Coretax PDF Toolkit</h3>
-            <p>
-              <span class="id">Bulk download Faktur Pajak Keluaran, Faktur Pajak Masukan, dan Bukti Potong dari Coretax dalam 1 klik.</span>
-              <span class="en">Bulk download Output Invoices, Input Invoices, and Withholding Slips from Coretax in 1 click.</span>
-            </p>
-            <ul class="product-features">
-              <li>✓ <span class="id">Hemat 90% waktu download</span><span class="en">Save 90% download time</span></li>
-              <li>✓ <span class="id">Support 3 jenis dokumen</span><span class="en">Support 3 document types</span></li>
-              <li>✓ <span class="id">Trial 7 hari gratis</span><span class="en">7-day free trial</span></li>
-            </ul>
-            <div class="product-actions">
-              <a href="coretax-dashboard/trial.html?tool=coretax-toolkit" class="btn btn-primary">
-                <i class="fa-solid fa-rocket"></i>
-                <span class="id">Coba Gratis 7 Hari</span>
-                <span class="en">Start Free Trial</span>
-              </a>
-              <a href="coretax-dashboard/login.html" class="btn btn-ghost">
-                <i class="fa-solid fa-right-to-bracket"></i>Login
-              </a>
-            </div>
-          </article>
-
-          <!-- e-Bupot Recap (coming soon) -->
-          <article class="product-card product-card-soon reveal">
-            <div class="product-icon"><i class="fa-solid fa-receipt"></i></div>
-            <span class="product-badge product-badge-soon">● Segera</span>
-            <h3>e-Bupot Recap Toolkit</h3>
-            <p>
-              <span class="id">Auto-rekap Bukti Potong dari banyak PDF ke Excel/CSV. Cocok untuk SPT PPh Pasal 23/26.</span>
-              <span class="en">Auto-recap Withholding Certificates from many PDFs to Excel/CSV. Ideal for PPh 23/26 filing.</span>
-            </p>
-            <ul class="product-features">
-              <li>✓ <span class="id">Rekap otomatis dari folder</span><span class="en">Auto-recap from folder</span></li>
-              <li>✓ <span class="id">Export ke Excel</span><span class="en">Export to Excel</span></li>
-              <li>✓ <span class="id">Deteksi duplikat</span><span class="en">Duplicate detection</span></li>
-            </ul>
-            <div class="product-actions">
-              <button class="btn btn-ghost" disabled>Coming Soon</button>
-            </div>
-          </article>
-
-          <!-- GL to Trial Balance (coming soon) -->
-          <article class="product-card product-card-soon reveal">
-            <div class="product-icon"><i class="fa-solid fa-chart-line"></i></div>
-            <span class="product-badge product-badge-soon">● Segera</span>
-            <h3>GL to Trial Balance</h3>
-            <p>
-              <span class="id">Template otomatis untuk konversi General Ledger ke Trial Balance dengan validasi built-in.</span>
-              <span class="en">Automated template for GL to Trial Balance conversion with built-in validation.</span>
-            </p>
-            <ul class="product-features">
-              <li>✓ <span class="id">Auto-format GL</span><span class="en">Auto-format GL</span></li>
-              <li>✓ <span class="id">Auto-generate TB</span><span class="en">Auto-generate TB</span></li>
-              <li>✓ <span class="id">Validation checks</span><span class="en">Validation checks</span></li>
-            </ul>
-            <div class="product-actions">
-              <button class="btn btn-ghost" disabled>Coming Soon</button>
-            </div>
-          </article>
-        </div>
-
-        <div class="product-info reveal">
-          <h3><span class="id">Bagaimana cara aksesnya?</span><span class="en">How to access?</span></h3>
-          <div class="product-info-grid">
-            <div class="product-info-item">
-              <i class="fa-solid fa-gift"></i>
-              <h4>Trial 7 Hari</h4>
-              <p><span class="id">Gratis untuk coba. Tidak perlu kartu kredit.</span><span class="en">Free to try. No credit card required.</span></p>
-            </div>
-            <div class="product-info-item">
-              <i class="fa-solid fa-key"></i>
-              <h4>Lifetime 1 Tool</h4>
-              <p><span class="id">Beli 1 tool, akses selamanya dengan update gratis.</span><span class="en">Buy 1 tool, lifetime access with free updates.</span></p>
-            </div>
-            <div class="product-info-item">
-              <i class="fa-solid fa-crown"></i>
-              <h4>Subscription</h4>
-              <p><span class="id">Langganan bulanan/tahunan, akses SEMUA tools.</span><span class="en">Monthly/yearly subscription, access ALL tools.</span></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 12. Contact -->
     <section class="section compact" id="contact" aria-labelledby="contact-title">
       <div class="container-xl">
         <div class="contact-card reveal">
@@ -1069,7 +963,7 @@
             ['Pendidikan & Sertifikasi', ['SMKN 11 Jakarta - Akreditasi A, Jurusan Akuntansi Keuangan dan Lembaga, Lulus 2021', 'Sertifikasi Kompetensi BNSP - Sertifikasi Kompetensi Akuntansi, Jul 2021 - Jul 2024']]
           ]
         },
-        executiveIntro: 'Accounting professional yang berfokus pada kualitas laporan, traceability, financial review, accounting-tax alignment, dan perbaikan proses kerja. Terbiasa menangani multi-entity workload di lingkungan konsultan dengan kebutuhan closing, review, audit, perpajakan, dan dokumentasi yang berbeda-beda.'
+        executiveIntro: 'Accounting professional yang berfokus pada kualitas laporan, traceability, financial review, accounting-tax alignment, dan perbaikan proses kerja.'
       },
       en: {
         ats: {
@@ -1084,7 +978,7 @@
             ['Education & Certification', ['SMKN 11 Jakarta - Financial Accounting and Institution, Graduated 2021', 'BNSP Accounting Competency Certification, Jul 2021 - Jul 2024']]
           ]
         },
-        executiveIntro: 'Accounting professional focused on reporting quality, traceability, financial review, accounting-tax alignment, and process improvement. Routinely handles multi-entity workloads within a consulting environment with diverse closing, review, audit, tax, and documentation needs.'
+        executiveIntro: 'Accounting professional focused on reporting quality, traceability, financial review, accounting-tax alignment, and process improvement.'
       }
     };
 
@@ -1112,7 +1006,7 @@
           <h1>${data.title}</h1>
           <p class="cv-role">${data.role}</p>
           <p class="cv-meta">${data.meta}</p>
-          ${isAts ? '' : `<p><strong>${lang === 'id' ? 'Executive Profile' : 'Executive Profile'}:</strong> ${escapeHTML(intro)}</p>`}
+          ${isAts ? '' : `<p><strong>Executive Profile:</strong> ${escapeHTML(intro)}</p>`}
           ${sections}
         </article>`;
       $$('.cv-tab').forEach(tab => tab.classList.toggle('active', tab.dataset.cvTab === type));
