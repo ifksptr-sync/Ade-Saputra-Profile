@@ -1,0 +1,347 @@
+$DashRoot = "D:\CoretaxTool\dashboard"
+
+function WriteUtf8($path, $text) {
+    $enc = New-Object System.Text.UTF8Encoding $false
+    [System.IO.File]::WriteAllText($path, $text, $enc)
+}
+
+# ============================================================
+# FILE 1: tools.html — halaman list produk
+# ============================================================
+$toolsHtml = @'
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tools — Ade Saputra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  .hero-tools{padding:120px 24px 60px;max-width:1200px;margin:0 auto}
+  .hero-tools h1{font-family:'Fraunces',serif;font-size:clamp(2.2rem,5vw,3.5rem);font-weight:700;letter-spacing:-.04em;color:var(--ink);margin:0 0 12px;line-height:1.05}
+  .hero-tools p.lead{font-size:1.05rem;line-height:1.75;color:var(--muted);max-width:680px;margin:0 0 40px}
+  .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+  .tool-card{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:26px;transition:.22s;display:flex;flex-direction:column;box-shadow:0 12px 32px rgba(15,23,42,.05)}
+  .tool-card:hover{transform:translateY(-4px);border-color:rgba(37,99,235,.32);box-shadow:0 20px 44px rgba(15,23,42,.10)}
+  .tool-icon{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--navy),var(--blue-2));display:grid;place-items:center;color:#fff;font-size:22px;margin-bottom:18px}
+  .tool-card h3{font-size:1.2rem;font-weight:900;color:var(--ink);margin:0 0 8px;letter-spacing:-.02em}
+  .tool-card .desc{font-size:.9rem;line-height:1.6;color:var(--muted);margin:0 0 20px;flex:1}
+  .tool-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:.72rem;font-weight:800;margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em}
+  .badge-available{background:rgba(16,185,129,.12);color:#059669}
+  .badge-soon{background:rgba(107,114,128,.12);color:#6b7280}
+  .tool-actions{display:flex;gap:10px;margin-top:auto}
+  .tool-actions .btn{flex:1;justify-content:center;padding:11px 16px;font-size:.85rem}
+  .btn-trial{background:linear-gradient(135deg,var(--blue-2),var(--navy));color:#fff;border:0;border-radius:12px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+  .btn-trial:hover{transform:translateY(-1px);text-decoration:none}
+  .btn-detail{background:var(--paper-soft);color:var(--ink);border:1px solid var(--line);border-radius:12px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+  .btn-detail:hover{background:var(--bg);text-decoration:none}
+  .back-link{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:.88rem;font-weight:700;margin-bottom:28px;text-decoration:none}
+  .back-link:hover{color:var(--blue)}
+  .empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="brand" style="text-decoration:none">
+      <div class="logo">AS</div>
+      <span>Ade Saputra</span>
+    </a>
+    <div class="nav-actions">
+      <button id="themeToggle" class="icon-btn" title="Toggle theme">🌙</button>
+      <a href="login.html" class="logout-btn" style="text-decoration:none;color:var(--ink)">Login</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero-tools">
+  <a href="../index.html" class="back-link">← Kembali ke Portofolio</a>
+  <h1>Tools & Products</h1>
+  <p class="lead">
+    Kumpulan tools otomasi untuk mempercepat pekerjaan accounting, tax, dan finance.
+    Setiap tool bisa dicoba <b>gratis 7 hari</b> — tanpa kartu kredit.
+  </p>
+
+  <div id="toolsGrid" class="tools-grid">
+    <div class="empty-state">Memuat tools...</div>
+  </div>
+</section>
+
+<script src="app.js"></script>
+<script>
+  // Theme toggle
+  const themeBtn = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  html.setAttribute('data-theme', savedTheme);
+  themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+  themeBtn.addEventListener('click', () => {
+    const cur = html.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+  });
+
+  // Load tools dari backend
+  (async () => {
+    const grid = document.getElementById('toolsGrid');
+    try {
+      const res = await fetch(API_URL + '/api/tools');
+      const data = await res.json();
+      if (!data.tools || !data.tools.length) {
+        grid.innerHTML = '<div class="empty-state">Belum ada tools tersedia.</div>';
+        return;
+      }
+
+      const iconMap = {
+        'receipt': '🧾',
+        'file': '📄',
+        'chart': '📊',
+        'default': '⚙️'
+      };
+
+      grid.innerHTML = data.tools.map(tool => {
+        const isAvailable = tool.status === 'available';
+        const badge = isAvailable
+          ? '<span class="tool-badge badge-available">● Tersedia</span>'
+          : '<span class="tool-badge badge-soon">● Segera</span>';
+
+        const actions = isAvailable
+          ? `<a href="trial.html?tool=${tool.id}" class="btn-trial">🚀 Coba Gratis ${tool.trial_days} Hari</a>`
+          : `<span class="btn-detail" style="opacity:.5;cursor:not-allowed">Coming Soon</span>`;
+
+        return `
+          <div class="tool-card">
+            <div class="tool-icon">${iconMap[tool.icon] || iconMap.default}</div>
+            ${badge}
+            <h3>${tool.name}</h3>
+            <p class="desc">${tool.description}</p>
+            <div class="tool-actions">
+              ${actions}
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch (e) {
+      grid.innerHTML = `<div class="empty-state">Gagal memuat tools: ${e.message}</div>`;
+    }
+  })();
+</script>
+</body>
+</html>
+'@
+WriteUtf8 "$DashRoot\tools.html" $toolsHtml
+Write-Host "[OK] tools.html" -ForegroundColor Green
+
+# ============================================================
+# FILE 2: trial.html — form trial
+# ============================================================
+$trialHtml = @'
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Coba Gratis — Coretax Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  .trial-wrap{min-height:100vh;display:grid;place-items:center;padding:40px 20px;background:radial-gradient(circle at top left,rgba(37,99,235,.08),transparent 30rem),var(--bg)}
+  .trial-card{width:100%;max-width:520px;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:38px 34px;box-shadow:0 22px 60px rgba(15,23,42,.08)}
+  .trial-header{text-align:center;margin-bottom:28px}
+  .trial-header .logo{width:60px;height:60px;border-radius:20px;background:linear-gradient(135deg,var(--navy),var(--blue-2));display:grid;place-items:center;color:#fff;font-weight:900;font-size:1.2rem;margin:0 auto 18px}
+  .trial-header h1{margin:0 0 8px;font-size:1.7rem;color:var(--ink);font-weight:900;letter-spacing:-.03em}
+  .trial-header p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.6}
+  .trial-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:rgba(16,185,129,.12);color:#059669;font-size:.78rem;font-weight:800;margin-bottom:18px;text-transform:uppercase;letter-spacing:.06em}
+  .field{margin-bottom:18px}
+  .field label{display:block;font-size:.82rem;font-weight:800;color:var(--ink);margin-bottom:8px}
+  .field input{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--paper-soft);color:var(--ink);font-size:.92rem;font-family:inherit;transition:.15s}
+  .field input:focus{outline:none;border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(37,99,235,.1)}
+  .field input:read-only{background:var(--bg);color:var(--muted);cursor:not-allowed}
+  .field .hint{font-size:.74rem;color:var(--muted);margin-top:6px;line-height:1.5}
+  .btn-primary{width:100%;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--blue-2),var(--navy));color:#fff;font-weight:900;font-size:1rem;cursor:pointer;transition:.2s}
+  .btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 20px rgba(37,99,235,.25)}
+  .btn-primary:disabled{opacity:.6;cursor:not-allowed}
+  .error{padding:14px;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.24);color:#b91c1c;border-radius:12px;font-size:.86rem;margin-top:16px;line-height:1.5}
+  .success{padding:20px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.3);border-radius:16px;margin-top:20px}
+  .success h3{color:#059669;font-size:1.05rem;font-weight:900;margin:0 0 10px}
+  .success p{margin:0 0 14px;color:#047857;font-size:.86rem;line-height:1.5}
+  .license-box{background:#fff;border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:12px;font-family:Consolas,monospace;font-size:.72rem;word-break:break-all;color:#065f46;line-height:1.5;margin-bottom:12px;user-select:all;max-height:120px;overflow-y:auto}
+  .copy-btn{padding:10px 16px;border:0;border-radius:10px;background:#059669;color:#fff;font-weight:800;font-size:.82rem;cursor:pointer;width:100%}
+  .copy-btn:hover{background:#047857}
+  .steps-next{background:var(--paper-soft);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:14px;font-size:.82rem;line-height:1.7;color:var(--text)}
+  .steps-next b{color:var(--ink)}
+  .footer-note{text-align:center;font-size:.78rem;color:var(--muted);margin-top:20px;line-height:1.5}
+  .footer-note a{color:var(--blue);font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="trial-wrap">
+  <div class="trial-card">
+
+    <div class="trial-header">
+      <div class="logo" id="toolLogo">CT</div>
+      <span class="trial-badge">🚀 7 Hari Gratis</span>
+      <h1 id="toolName">Coba Coretax Toolkit</h1>
+      <p id="toolDesc">Aktivasi trial tanpa kartu kredit. Langsung pakai.</p>
+    </div>
+
+    <form id="trialForm">
+      <div class="field">
+        <label>Nama Lengkap</label>
+        <input type="text" id="name" placeholder="Nama Anda" required />
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="email@perusahaan.com" required />
+        <div class="hint">Kami tidak akan spam. Hanya kirim info update produk.</div>
+      </div>
+
+      <div class="field">
+        <label>Machine ID</label>
+        <input type="text" id="machineId" placeholder="Copy dari extension Chrome" required />
+        <div class="hint">
+          Buka extension <b>Coretax PDF Toolkit</b> di Chrome → Copy Machine ID → paste di sini.
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" id="submitBtn">
+        🚀 Mulai Trial 7 Hari
+      </button>
+    </form>
+
+    <div id="error" class="error hidden"></div>
+
+    <div id="success" class="hidden">
+      <div class="success">
+        <h3>✅ Trial Aktif!</h3>
+        <p>License trial kamu sudah siap. Copy dan paste di extension:</p>
+        <div class="license-box" id="licenseKey"></div>
+        <button class="copy-btn" id="copyBtn">📋 Copy License Key</button>
+
+        <div class="steps-next">
+          <b>Langkah selanjutnya:</b><br>
+          1. Buka extension Coretax Toolkit di Chrome<br>
+          2. Paste license key di kolom License<br>
+          3. Klik Activate<br>
+          4. Selesai! Trial aktif 7 hari
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Sudah punya license? <a href="login.html">Login Dashboard</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  // Auto-fill machine ID dari query param
+  const params = new URLSearchParams(location.search);
+  const toolId = params.get('tool') || 'coretax-toolkit';
+  const midFromExt = params.get('mid');
+  if (midFromExt) document.getElementById('machineId').value = midFromExt;
+
+  // Set tool name display
+  const toolNames = {
+    'coretax-toolkit': { name: 'Coretax Toolkit', logo: 'CT', desc: 'Bulk download Faktur Pajak, Bukti Potong Coretax' }
+  };
+  const tool = toolNames[toolId] || toolNames['coretax-toolkit'];
+  document.getElementById('toolName').textContent = 'Coba ' + tool.name;
+  document.getElementById('toolDesc').textContent = tool.desc;
+  document.getElementById('toolLogo').textContent = tool.logo;
+
+  document.getElementById('trialForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const machineId = document.getElementById('machineId').value.trim();
+    const btn = document.getElementById('submitBtn');
+    const err = document.getElementById('error');
+    const success = document.getElementById('success');
+
+    err.classList.add('hidden');
+    success.classList.add('hidden');
+    btn.disabled = true;
+    btn.textContent = '⏳ Memproses...';
+
+    try {
+      const res = await fetch(API_URL + '/api/trial/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          name: name,
+          tool: toolId,
+          machine_id: machineId
+        })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('licenseKey').textContent = data.license_key;
+        success.classList.remove('hidden');
+        document.getElementById('trialForm').style.display = 'none';
+      } else {
+        err.textContent = data.error || 'Gagal memulai trial';
+        err.classList.remove('hidden');
+      }
+    } catch (ex) {
+      err.textContent = 'Error: ' + ex.message;
+      err.classList.remove('hidden');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '🚀 Mulai Trial 7 Hari';
+    }
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', async () => {
+    const key = document.getElementById('licenseKey').textContent;
+    await navigator.clipboard.writeText(key);
+    document.getElementById('copyBtn').textContent = '✅ Tersalin!';
+    setTimeout(() => {
+      document.getElementById('copyBtn').textContent = '📋 Copy License Key';
+    }, 1500);
+  });
+</script>
+</body>
+</html>
+'@
+WriteUtf8 "$DashRoot\trial.html" $trialHtml
+Write-Host "[OK] trial.html" -ForegroundColor Green
+
+# ============================================================
+# FILE 3: index-tools.html — halaman alternatif kalau perlu
+# ============================================================
+Write-Host ""
+Write-Host "================================================" -ForegroundColor Cyan
+Write-Host " TOOLS + TRIAL PAGES CREATED" -ForegroundColor Green
+Write-Host "================================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Lokasi: $DashRoot" -ForegroundColor Yellow
+Write-Host ""
+Get-ChildItem $DashRoot | ForEach-Object {
+    $size = [math]::Round($_.Length / 1KB, 1)
+    Write-Host "  $($_.Name)  ($size KB)"
+}
+Write-Host ""
+Write-Host "================================================" -ForegroundColor Cyan
+Write-Host " NEXT STEPS" -ForegroundColor Yellow
+Write-Host "================================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "1. Upload 2 file baru ke GitHub:" -ForegroundColor Green
+Write-Host "   - tools.html" -ForegroundColor Cyan
+Write-Host "   - trial.html" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "2. Buka: https://github.com/ifksptr-sync/Ade-Saputra-Profile/upload/main/coretax-dashboard" -ForegroundColor Yellow
+Write-Host "   Drag kedua file → Commit" 
+Write-Host ""
