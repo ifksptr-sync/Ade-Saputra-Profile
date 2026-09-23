@@ -67,17 +67,16 @@
       <span class="muted">Sesi dashboard</span>
     </div>
   </section>
-    <section class="card download-card" style="background:linear-gradient(135deg,#111827,#1f2937);color:#fff;border:0;text-align:center;padding:32px;">
+      <section id="downloadSection" class="card" style="background:linear-gradient(135deg,#111827,#1f2937);color:#fff;border:0;text-align:center;padding:32px;">
     <div style="width:64px;height:64px;border-radius:20px;background:rgba(59,130,246,.2);display:grid;place-items:center;margin:0 auto 16px;font-size:28px;">📥</div>
     <h2 style="color:#fff;margin:0 0 8px;">Download Extension</h2>
-    <p style="color:#cbd5e1;font-size:.9rem;margin:0 0 20px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6;">
-      Extension Chrome untuk bulk download Faktur Pajak & Bukti Potong.
-      Install di browser untuk mulai pakai.
+    <p id="downloadDesc" style="color:#cbd5e1;font-size:.9rem;margin:0 0 20px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6;">
+      Memuat...
     </p>
-    <a href="CoretaxPDFToolkit.zip" download class="btn" style="background:#fff;color:#111827;padding:14px 32px;border-radius:14px;font-weight:900;font-size:.95rem;display:inline-flex;align-items:center;gap:10px;text-decoration:none;">
-      <i class="fa-solid fa-download"></i> Download Extension (.zip)
+    <a id="downloadLink" href="#" download style="background:#fff;color:#111827;padding:14px 32px;border-radius:14px;font-weight:900;font-size:.95rem;display:inline-flex;align-items:center;gap:10px;text-decoration:none;">
+      <i class="fa-solid fa-download"></i> <span id="downloadLinkText">Download</span>
     </a>
-    <div style="margin-top:14px;font-size:.78rem;color:#94a3b8;">
+    <div id="downloadHint" style="margin-top:14px;font-size:.78rem;color:#94a3b8;line-height:1.6;max-width:480px;margin-left:auto;margin-right:auto;">
       Setelah download: extract → buka chrome://extensions → aktifkan Developer Mode → Load unpacked → pilih folder hasil extract
     </div>
   </section>
@@ -116,6 +115,23 @@
   });
   (async () => {
     try {
+            // Set download link berdasarkan tier
+      const tier = (me.tier || 'pro').toLowerCase();
+      const dlLink = document.getElementById('downloadLink');
+      const dlText = document.getElementById('downloadLinkText');
+      const dlDesc = document.getElementById('downloadDesc');
+      const dlHint = document.getElementById('downloadHint');
+
+      if (tier === 'trial') {
+        dlLink.href = 'CoretaxPDFToolkit-Trial.zip';
+        dlText.textContent = 'Download Extension (Trial)';
+        dlDesc.innerHTML = 'Kamu pakai versi <b style="color:#fbbf24;">TRIAL</b>. Sesi terbatas 5 menit per halaman. Upgrade untuk akses unlimited.';
+        dlHint.innerHTML = 'Mau yang unlimited? <a href="https://ifksptr-sync.github.io/Ade-Saputra-Profile/#contact" target="_blank" style="color:#60a5fa;font-weight:700;">Hubungi untuk upgrade →</a>';
+      } else {
+        dlLink.href = 'CoretaxPDFToolkit-Full.zip';
+        dlText.textContent = 'Download Extension (Full)';
+        dlDesc.innerHTML = 'Extension Chrome untuk bulk download Faktur Pajak & Bukti Potong. <b style="color:#86efac;">Unlimited, no session limit.</b>';
+      }
       const me = await apiGet('/api/me');
       document.getElementById('infoMachine').textContent = me.machine_id || '-';
       document.getElementById('infoIssued').textContent = fmtDate(me.issued_at);
