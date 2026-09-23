@@ -148,8 +148,12 @@
     .thesis-card .statement{position:relative;z-index:1;margin-top:28px;font-size:1.15rem;line-height:1.9;color:var(--text);max-width:820px}
     .hero-actions{position:relative;z-index:1;margin-top:30px;display:flex;flex-wrap:wrap;gap:12px}
 
-    .product-showcase{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .product-mini-card{padding:18px;border-radius:22px;background:var(--paper);border:1px solid var(--line);box-shadow:0 12px 32px rgba(15,23,42,.05);transition:.22s ease;cursor:pointer;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;text-decoration:none;color:inherit}
+    /* ===== PRODUCT CAROUSEL ===== */
+    .product-carousel{position:relative}
+    .product-showcase{display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;scroll-snap-type:x mandatory;padding:4px 4px 12px;margin:0 -4px;-ms-overflow-style:none;scrollbar-width:none}
+    .product-showcase::-webkit-scrollbar{display:none}
+    .product-showcase::after{content:"";flex:0 0 4px}
+    .product-mini-card{flex:0 0 260px;min-width:260px;scroll-snap-align:start;padding:18px;border-radius:22px;background:var(--paper);border:1px solid var(--line);box-shadow:0 12px 32px rgba(15,23,42,.05);transition:.22s ease;cursor:pointer;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;text-decoration:none;color:inherit}
     .product-mini-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:rgba(37,99,235,.32)}
     .product-mini-card:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
     .product-mini-soon{cursor:not-allowed;opacity:.7}
@@ -163,6 +167,15 @@
     .product-mini-desc{font-size:.75rem;color:var(--muted);line-height:1.5;margin:0;flex:1}
     .product-mini-cta{font-size:.72rem;font-weight:800;color:var(--blue);display:flex;align-items:center;gap:5px;margin-top:auto;padding-top:6px;border-top:1px solid var(--line)}
     .product-mini-cta-disabled{color:var(--muted)}
+    .product-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+    .product-dots{display:flex;gap:6px;align-items:center}
+    .product-dot{width:6px;height:6px;border-radius:999px;background:var(--line);transition:.2s ease;cursor:pointer}
+    .product-dot.active{width:20px;background:var(--blue)}
+    .product-arrows{display:flex;gap:6px}
+    .product-arrow{width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:.2s ease;font-size:12px}
+    .product-arrow:hover{border-color:rgba(37,99,235,.35);color:var(--blue);transform:translateY(-1px)}
+    .product-arrow:disabled{opacity:.35;cursor:not-allowed;transform:none}
+    @media (max-width:760px){.product-mini-card{flex:0 0 240px;min-width:240px}}
 
     .executive-note{border-radius:var(--radius);padding:24px;background:linear-gradient(135deg,rgba(29,78,216,.10),rgba(14,165,233,.06));border:1px solid rgba(37,99,235,.16);display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
     .executive-note .note-icon{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--blue-2),#1e40af)}
@@ -341,7 +354,7 @@
     @media (max-width:760px){
       .container-xl{padding-inline:18px}.section{padding:76px 0}.section.compact{padding:64px 0}
       .hero{padding-top:92px}.thesis-card,.identity-card,.contact-card{border-radius:28px;padding:24px}
-      .product-showcase,.principles,.panel-grid,.case-grid,.contribution-grid,.workflow-track,.tab-list,.strength-grid{grid-template-columns:1fr}
+      .principles,.panel-grid,.case-grid,.contribution-grid,.workflow-track,.tab-list,.strength-grid{grid-template-columns:1fr}
       .metric-grid{grid-template-columns:repeat(2,1fr)}
       .case-row{grid-template-columns:1fr;gap:4px}
       .matrix-row,.tool-row{grid-template-columns:1fr}
@@ -436,35 +449,67 @@
             </div>
           </div>
 
-          <div class="product-showcase reveal" aria-label="Tools & Products">
-            <a class="product-mini-card" href="coretax-dashboard/trial.html?tool=coretax-toolkit" aria-label="Coba Coretax PDF Toolkit gratis 7 hari">
-              <div class="product-mini-header">
-                <div class="product-mini-icon"><i class="fa-solid fa-file-invoice"></i></div>
-                <span class="product-mini-badge product-mini-badge-available">● Tersedia</span>
-              </div>
-              <h3 class="product-mini-title">Coretax PDF Toolkit</h3>
-              <p class="product-mini-desc"><span class="id">Bulk download Faktur Pajak & Bukti Potong dalam 1 klik.</span><span class="en">Bulk download Tax Invoices & Withholding Slips in 1 click.</span></p>
-              <div class="product-mini-cta"><i class="fa-solid fa-rocket"></i><span class="id">Coba Gratis 7 Hari</span><span class="en">Start Free Trial</span></div>
-            </a>
+          <div class="product-carousel reveal" aria-label="Tools & Products">
+            <div class="product-showcase" id="productShowcase">
 
-            <div class="product-mini-card product-mini-soon" aria-label="Segera hadir: e-Bupot Recap Toolkit">
-              <div class="product-mini-header">
-                <div class="product-mini-icon"><i class="fa-solid fa-receipt"></i></div>
-                <span class="product-mini-badge product-mini-badge-soon">● Segera</span>
+              <a class="product-mini-card" href="coretax-dashboard/trial.html?tool=coretax-toolkit" aria-label="Coba Coretax PDF Toolkit gratis 3 hari">
+                <div class="product-mini-header">
+                  <div class="product-mini-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                  <span class="product-mini-badge product-mini-badge-available">Tersedia</span>
+                </div>
+                <h3 class="product-mini-title">Coretax PDF Toolkit</h3>
+                <p class="product-mini-desc"><span class="id">Bulk download Faktur Pajak & Bukti Potong dalam 1 klik.</span><span class="en">Bulk download Tax Invoices & Withholding Slips in 1 click.</span></p>
+                <div class="product-mini-cta"><i class="fa-solid fa-rocket"></i><span class="id">Coba Gratis 3 Hari</span><span class="en">Start Free Trial</span></div>
+              </a>
+
+              <div class="product-mini-card product-mini-soon">
+                <div class="product-mini-header">
+                  <div class="product-mini-icon"><i class="fa-solid fa-receipt"></i></div>
+                  <span class="product-mini-badge product-mini-badge-soon">Segera</span>
+                </div>
+                <h3 class="product-mini-title">e-Bupot Recap Toolkit</h3>
+                <p class="product-mini-desc"><span class="id">Auto-rekap Bukti Potong dari banyak PDF ke Excel.</span><span class="en">Auto-recap Withholding Certificates from PDFs to Excel.</span></p>
+                <div class="product-mini-cta product-mini-cta-disabled"><i class="fa-solid fa-clock"></i> Coming Soon</div>
               </div>
-              <h3 class="product-mini-title">e-Bupot Recap Toolkit</h3>
-              <p class="product-mini-desc"><span class="id">Auto-rekap Bukti Potong dari banyak PDF.</span><span class="en">Auto-recap Withholding Certificates from PDFs.</span></p>
-              <div class="product-mini-cta product-mini-cta-disabled"><i class="fa-solid fa-clock"></i> Coming Soon</div>
+
+              <div class="product-mini-card product-mini-soon">
+                <div class="product-mini-header">
+                  <div class="product-mini-icon"><i class="fa-solid fa-chart-line"></i></div>
+                  <span class="product-mini-badge product-mini-badge-soon">Segera</span>
+                </div>
+                <h3 class="product-mini-title">GL to Trial Balance</h3>
+                <p class="product-mini-desc"><span class="id">Konversi GL ke Trial Balance otomatis dengan validasi.</span><span class="en">Automated GL to Trial Balance conversion with validation.</span></p>
+                <div class="product-mini-cta product-mini-cta-disabled"><i class="fa-solid fa-clock"></i> Coming Soon</div>
+              </div>
+
+              <div class="product-mini-card product-mini-soon">
+                <div class="product-mini-header">
+                  <div class="product-mini-icon"><i class="fa-solid fa-file-export"></i></div>
+                  <span class="product-mini-badge product-mini-badge-soon">Segera</span>
+                </div>
+                <h3 class="product-mini-title">e-Faktur Export</h3>
+                <p class="product-mini-desc"><span class="id">Export data e-Faktur ke Excel untuk pelaporan.</span><span class="en">Export e-Faktur data to Excel for reporting.</span></p>
+                <div class="product-mini-cta product-mini-cta-disabled"><i class="fa-solid fa-clock"></i> Coming Soon</div>
+              </div>
+
+              <div class="product-mini-card product-mini-soon">
+                <div class="product-mini-header">
+                  <div class="product-mini-icon"><i class="fa-solid fa-calculator"></i></div>
+                  <span class="product-mini-badge product-mini-badge-soon">Segera</span>
+                </div>
+                <h3 class="product-mini-title">PPN Calculator</h3>
+                <p class="product-mini-desc"><span class="id">Kalkulator PPN & PPh otomatis dengan tarif terbaru.</span><span class="en">Automated VAT & Income Tax calculator with latest rates.</span></p>
+                <div class="product-mini-cta product-mini-cta-disabled"><i class="fa-solid fa-clock"></i> Coming Soon</div>
+              </div>
+
             </div>
 
-            <div class="product-mini-card product-mini-soon" aria-label="Segera hadir: GL to Trial Balance">
-              <div class="product-mini-header">
-                <div class="product-mini-icon"><i class="fa-solid fa-chart-line"></i></div>
-                <span class="product-mini-badge product-mini-badge-soon">● Segera</span>
+            <div class="product-nav">
+              <div class="product-dots" id="productDots"></div>
+              <div class="product-arrows">
+                <button class="product-arrow" id="productPrev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="product-arrow" id="productNext" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
               </div>
-              <h3 class="product-mini-title">GL to Trial Balance</h3>
-              <p class="product-mini-desc"><span class="id">Konversi GL ke Trial Balance otomatis.</span><span class="en">Automated GL to Trial Balance conversion.</span></p>
-              <div class="product-mini-cta product-mini-cta-disabled"><i class="fa-solid fa-clock"></i> Coming Soon</div>
             </div>
           </div>
 
@@ -483,7 +528,7 @@
       <div class="container-xl">
         <div class="philosophy-grid">
           <div class="quote-card reveal">
-            <span class="quote-mark">“</span>
+            <span class="quote-mark">"</span>
             <h2 class="display section-title" id="philosophy-title">
               <span class="id">Accounting bukan hanya mencatat transaksi.</span>
               <span class="en">Accounting is not merely recording transactions.</span>
@@ -939,6 +984,59 @@
       const isOpen = card.classList.toggle('open');
       btn.setAttribute('aria-expanded', String(isOpen));
     }));
+
+    // ========================================================
+    // PRODUCT CAROUSEL
+    // ========================================================
+    (function initProductCarousel(){
+      const track = document.getElementById('productShowcase');
+      const dotsContainer = document.getElementById('productDots');
+      const prevBtn = document.getElementById('productPrev');
+      const nextBtn = document.getElementById('productNext');
+      if (!track || !dotsContainer || !prevBtn || !nextBtn) return;
+
+      const cards = track.querySelectorAll('.product-mini-card');
+      if (!cards.length) return;
+
+      cards.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'product-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => {
+          cards[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        });
+        dotsContainer.appendChild(dot);
+      });
+
+      const dots = dotsContainer.querySelectorAll('.product-dot');
+
+      function updateUI() {
+        const scrollLeft = track.scrollLeft;
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        prevBtn.disabled = scrollLeft <= 5;
+        nextBtn.disabled = scrollLeft >= maxScroll - 5;
+
+        let closest = 0;
+        let minDist = Infinity;
+        cards.forEach((card, i) => {
+          const dist = Math.abs(card.offsetLeft - scrollLeft);
+          if (dist < minDist) { minDist = dist; closest = i; }
+        });
+        dots.forEach((d, i) => d.classList.toggle('active', i === closest));
+      }
+
+      const scrollAmt = () => (cards[0]?.offsetWidth || 260) + 14;
+
+      prevBtn.addEventListener('click', () => {
+        track.scrollBy({ left: -scrollAmt(), behavior: 'smooth' });
+      });
+      nextBtn.addEventListener('click', () => {
+        track.scrollBy({ left: scrollAmt(), behavior: 'smooth' });
+      });
+
+      track.addEventListener('scroll', updateUI, { passive: true });
+      window.addEventListener('resize', updateUI);
+      updateUI();
+    })();
 
     $$('.case-filter').forEach(filter => filter.addEventListener('click', () => {
       const key = filter.dataset.filter;
