@@ -9,33 +9,48 @@
 <link rel="stylesheet" href="style.css" />
 <style>
   .trial-wrap{min-height:100vh;display:grid;place-items:center;padding:40px 20px;background:radial-gradient(circle at top left,rgba(37,99,235,.08),transparent 30rem),var(--bg)}
-  .trial-card{width:100%;max-width:520px;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:38px 34px;box-shadow:0 22px 60px rgba(15,23,42,.08)}
+  .trial-card{width:100%;max-width:560px;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:38px 34px;box-shadow:0 22px 60px rgba(15,23,42,.08)}
   .trial-header{text-align:center;margin-bottom:28px}
   .trial-header .logo{width:60px;height:60px;border-radius:20px;background:linear-gradient(135deg,var(--navy),var(--blue-2));display:grid;place-items:center;color:#fff;font-weight:900;font-size:1.2rem;margin:0 auto 18px}
   .trial-header h1{margin:0 0 8px;font-size:1.7rem;color:var(--ink);font-weight:900;letter-spacing:-.03em}
   .trial-header p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.6}
   .trial-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;background:rgba(16,185,129,.12);color:#059669;font-size:.78rem;font-weight:800;margin-bottom:18px;text-transform:uppercase;letter-spacing:.06em}
-  .field{margin-bottom:18px}
-  .field label{display:block;font-size:.82rem;font-weight:800;color:var(--ink);margin-bottom:8px}
-  .field input{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--paper-soft);color:var(--ink);font-size:.92rem;font-family:inherit;transition:.15s}
-  .field input:focus{outline:none;border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(37,99,235,.1)}
-  .field .hint{font-size:.74rem;color:var(--muted);margin-top:6px;line-height:1.5}
-  .btn-primary{width:100%;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--blue-2),var(--navy));color:#fff;font-weight:900;font-size:1rem;cursor:pointer;transition:.2s}
-  .btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 20px rgba(37,99,235,.25)}
-  .btn-primary:disabled{opacity:.6;cursor:not-allowed}
-  .error{padding:14px;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.24);color:#b91c1c;border-radius:12px;font-size:.86rem;margin-top:16px;line-height:1.5}
-  .success{padding:20px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.3);border-radius:16px;margin-top:20px}
-  .success h3{color:#059669;font-size:1.05rem;font-weight:900;margin:0 0 10px}
-  .success p{margin:0 0 14px;color:#047857;font-size:.86rem;line-height:1.5}
-  .license-box{background:#fff;border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:12px;font-family:Consolas,monospace;font-size:.72rem;word-break:break-all;color:#065f46;line-height:1.5;margin-bottom:12px;user-select:all;max-height:120px;overflow-y:auto}
-  .copy-btn{padding:10px 16px;border:0;border-radius:10px;background:#059669;color:#fff;font-weight:800;font-size:.82rem;cursor:pointer;width:100%;margin-bottom:10px}
-  .copy-btn:hover{background:#047857}
-  .download-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:linear-gradient(135deg,#1e40af,#1d4ed8);color:#fff;border-radius:12px;font-weight:800;font-size:.92rem;text-decoration:none;margin-bottom:10px}
+
+  .step-card{background:var(--paper-soft);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px}
+  .step-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#111827;color:#fff;font-size:14px;font-weight:900;flex:0 0 auto}
+  .step-title{font-size:1rem;font-weight:900;color:var(--ink);letter-spacing:-.02em}
+  .step-title small{display:block;font-weight:500;font-size:.78rem;color:var(--muted);margin-top:2px}
+
+  .download-btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;background:linear-gradient(135deg,#059669,#047857);color:#fff;border-radius:12px;font-weight:800;font-size:.95rem;text-decoration:none;margin-bottom:12px}
   .download-btn:hover{opacity:.92}
-  .steps-next{background:var(--paper-soft);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:14px;font-size:.82rem;line-height:1.7;color:var(--text)}
-  .steps-next b{color:var(--ink)}
-  .footer-note{text-align:center;font-size:.78rem;color:var(--muted);margin-top:20px;line-height:1.5}
+
+  .instructions{font-size:.82rem;color:var(--text);line-height:1.8;background:#fff;padding:14px;border-radius:12px;border:1px solid var(--line)}
+  .instructions b{color:var(--ink)}
+  .instructions code{background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:.78rem}
+
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:.82rem;font-weight:800;color:var(--ink);margin-bottom:6px}
+  .field input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-size:.9rem;font-family:inherit;transition:.15s}
+  .field input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.1)}
+  .field .hint{font-size:.72rem;color:var(--muted);margin-top:4px;line-height:1.5}
+
+  .btn-primary{width:100%;padding:14px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--blue-2),var(--navy));color:#fff;font-weight:900;font-size:.95rem;cursor:pointer;transition:.2s}
+  .btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 20px rgba(37,99,235,.25)}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+
+  .alert{padding:14px;border-radius:12px;font-size:.86rem;line-height:1.6;margin-top:14px}
+  .alert-error{background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.24);color:#b91c1c}
+  .alert-warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);color:#92400e}
+  .alert-success{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.3);color:#047857}
+
+  .license-box{background:#fff;border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:14px;font-family:Consolas,monospace;font-size:.72rem;word-break:break-all;color:#065f46;line-height:1.6;margin:12px 0;user-select:all;max-height:140px;overflow-y:auto}
+  .copy-btn{padding:10px 16px;border:0;border-radius:10px;background:#059669;color:#fff;font-weight:800;font-size:.85rem;cursor:pointer;width:100%}
+  .copy-btn:hover{background:#047857}
+
+  .footer-note{text-align:center;font-size:.78rem;color:var(--muted);margin-top:20px}
   .footer-note a{color:var(--blue);font-weight:700;text-decoration:none}
+  .hidden{display:none!important}
 </style>
 </head>
 <body>
@@ -44,52 +59,107 @@
   <div class="trial-card">
 
     <div class="trial-header">
-      <div class="logo" id="toolLogo">CT</div>
+      <div class="logo">CT</div>
       <span class="trial-badge">3 Hari Gratis</span>
-      <h1 id="toolName">Coba Coretax Toolkit</h1>
-      <p id="toolDesc">Aktivasi trial tanpa kartu kredit. Langsung pakai.</p>
+      <h1>Coba Coretax Toolkit</h1>
+      <p>Ikuti langkah di bawah. Butuh waktu ~5 menit.</p>
     </div>
 
-    <form id="trialForm">
-      <div class="field">
-        <label>Nama Lengkap</label>
-        <input type="text" id="name" placeholder="Nama Anda" required />
-      </div>
-
-      <div class="field">
-        <label>Email</label>
-        <input type="email" id="email" placeholder="email@perusahaan.com" required />
-        <div class="hint">Kami tidak akan spam. Hanya kirim info update produk.</div>
-      </div>
-
-      <button type="submit" class="btn-primary" id="submitBtn">
-        Mulai Trial 3 Hari
-      </button>
-    </form>
-
-    <div id="error" class="error hidden"></div>
-
-    <div id="success" class="hidden">
-      <div class="success">
-        <h3>Trial Aktif!</h3>
-        <p>License trial kamu sudah siap. Copy dan paste di extension:</p>
-        <div class="license-box" id="licenseKey"></div>
-        <button class="copy-btn" id="copyBtn">Copy License Key</button>
-
-        <a href="CoretaxPDFToolkit-Trial.zip" download class="download-btn">
+    <!-- ============================================ -->
+    <!-- STEP 1: DOWNLOAD EXTENSION -->
+    <!-- ============================================ -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">
           Download Extension (Trial)
-        </a>
-
-        <div class="steps-next">
-          <b>Langkah selanjutnya:</b><br>
-          1. Klik <b>Download Extension (Trial)</b> di atas<br>
-          2. Extract file ZIP<br>
-          3. Buka <b>chrome://extensions</b> → aktifkan <b>Developer mode</b><br>
-          4. Klik <b>Load unpacked</b> → pilih folder hasil extract<br>
-          5. Klik icon extension → paste License Key → klik <b>Activate</b><br>
-          6. Buka Coretax → panel trial muncul<br>
-          <b>Sesi trial: 5 menit &amp; max 5 PDF per halaman.</b>
+          <small>Pasang di Chrome untuk dapat Machine ID</small>
         </div>
+      </div>
+
+      <a href="CoretaxPDFToolkit-Trial.zip" download class="download-btn">
+        Download Extension (.zip)
+      </a>
+
+      <div class="instructions">
+        <b>Cara pasang:</b><br>
+        1. Extract file ZIP yang baru diunduh<br>
+        2. Buka <code>chrome://extensions</code> di Chrome<br>
+        3. Aktifkan <b>Developer mode</b> (kanan atas)<br>
+        4. Klik <b>Load unpacked</b> → pilih folder hasil extract<br>
+        5. Klik icon <b>Coretax PDF Toolkit</b> di toolbar → <b>Copy Machine ID</b>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- STEP 2: GENERATE LICENSE -->
+    <!-- ============================================ -->
+    <div class="step-card" id="step2">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">
+          Generate License Trial
+          <small>Isi form di bawah untuk mendapat license key</small>
+        </div>
+      </div>
+
+      <form id="trialForm">
+        <div class="field">
+          <label>Nama Lengkap</label>
+          <input type="text" id="name" placeholder="Nama Anda" required />
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="email@perusahaan.com" required />
+          <div class="hint">Satu email hanya bisa 1x trial. Gunakan email aktif.</div>
+        </div>
+
+        <div class="field">
+          <label>Machine ID</label>
+          <input type="text" id="machineId" placeholder="Paste Machine ID dari extension" required />
+          <div class="hint">Copy dari popup extension di Chrome (langkah 5 di atas).</div>
+        </div>
+
+        <button type="submit" class="btn-primary" id="submitBtn">
+          Generate License Trial
+        </button>
+      </form>
+
+      <div id="error" class="alert alert-error hidden"></div>
+      <div id="alreadyTrialed" class="alert alert-warn hidden">
+        <b>Email ini sudah pernah trial.</b>
+        <div id="alreadyInfo"></div>
+        <div id="licenseDisplay" class="hidden">
+          <p style="margin:10px 0 8px 0;font-weight:700;">License key kamu:</p>
+          <div class="license-box" id="oldLicenseKey"></div>
+          <button class="copy-btn" id="copyOldBtn">Copy License Key</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SUCCESS: SHOW LICENSE -->
+    <!-- ============================================ -->
+    <div class="step-card hidden" id="successCard" style="background:rgba(16,185,129,.05);border-color:rgba(16,185,129,.3)">
+      <div class="step-header">
+        <div class="step-num" style="background:#059669">✓</div>
+        <div class="step-title">
+          Trial Aktif!
+          <small>License sudah siap — copy dan paste di extension</small>
+        </div>
+      </div>
+
+      <div class="license-box" id="newLicenseKey"></div>
+      <button class="copy-btn" id="copyNewBtn">Copy License Key</button>
+
+      <div class="instructions" style="margin-top:12px">
+        <b>Langkah terakhir:</b><br>
+        1. Buka popup extension Coretax PDF Toolkit<br>
+        2. Paste license key di kolom License<br>
+        3. Klik <b>Activate</b><br>
+        4. Buka Coretax → panel trial muncul<br>
+        <b>Trial: 5 menit/sesi · Max 5 PDF per halaman</b>
       </div>
     </div>
 
@@ -102,27 +172,21 @@
 
 <script src="app.js"></script>
 <script>
-  const params = new URLSearchParams(location.search);
-  const toolId = params.get('tool') || 'coretax-toolkit';
-
-  const toolNames = {
-    'coretax-toolkit': { name: 'Coretax Toolkit', logo: 'CT', desc: 'Bulk download Faktur Pajak, Bukti Potong Coretax' }
-  };
-  const tool = toolNames[toolId] || toolNames['coretax-toolkit'];
-  document.getElementById('toolName').textContent = 'Coba ' + tool.name;
-  document.getElementById('toolDesc').textContent = tool.desc;
-  document.getElementById('toolLogo').textContent = tool.logo;
-
+  // ============================================================
+  // FORM SUBMIT
+  // ============================================================
   document.getElementById('trialForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
+    const machineId = document.getElementById('machineId').value.trim();
     const btn = document.getElementById('submitBtn');
     const err = document.getElementById('error');
-    const success = document.getElementById('success');
+    const warn = document.getElementById('alreadyTrialed');
 
     err.classList.add('hidden');
-    success.classList.add('hidden');
+    warn.classList.add('hidden');
     btn.disabled = true;
     btn.textContent = 'Memproses...';
 
@@ -133,17 +197,36 @@
         body: JSON.stringify({
           email: email,
           name: name,
-          tool: toolId
+          tool: 'coretax-toolkit',
+          machine_id: machineId
         })
       });
       const data = await res.json();
 
       if (data.success) {
-        document.getElementById('licenseKey').textContent = data.license_key;
-        success.classList.remove('hidden');
-        document.getElementById('trialForm').style.display = 'none';
+        // Sukses — tampilkan license di success card
+        document.getElementById('newLicenseKey').textContent = data.license_key;
+        document.getElementById('successCard').classList.remove('hidden');
+        document.getElementById('step2').classList.add('hidden');
+        // Simpan ke localStorage
+        localStorage.setItem('trial_email', email);
+        localStorage.setItem('trial_license', data.license_key);
+      } else if (data.already_trialed) {
+        // Email udah pernah trial
+        warn.classList.remove('hidden');
+        document.getElementById('alreadyInfo').innerHTML =
+          'Trial sudah digunakan untuk tool ini.' +
+          (data.expires_at ? ' Kadaluarsa: <b>' + data.expires_at + '</b>' : '');
+
+        if (data.is_active && data.license_key) {
+          document.getElementById('oldLicenseKey').textContent = data.license_key;
+          document.getElementById('licenseDisplay').classList.remove('hidden');
+        } else if (!data.is_active) {
+          document.getElementById('alreadyInfo').innerHTML +=
+            '<br><br><b>Trial sudah kadaluarsa.</b> Hubungi kami untuk upgrade ke full version.';
+        }
       } else {
-        err.textContent = data.error || 'Gagal memulai trial';
+        err.textContent = data.error || 'Gagal memproses.';
         err.classList.remove('hidden');
       }
     } catch (ex) {
@@ -151,18 +234,44 @@
       err.classList.remove('hidden');
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Mulai Trial 3 Hari';
+      btn.textContent = 'Generate License Trial';
     }
   });
 
-  document.getElementById('copyBtn').addEventListener('click', async () => {
-    const key = document.getElementById('licenseKey').textContent;
-    await navigator.clipboard.writeText(key);
-    document.getElementById('copyBtn').textContent = 'Tersalin!';
-    setTimeout(() => {
-      document.getElementById('copyBtn').textContent = 'Copy License Key';
-    }, 1500);
-  });
+  // ============================================================
+  // COPY BUTTONS
+  // ============================================================
+  function setupCopy(btnId, targetId) {
+    document.getElementById(btnId).addEventListener('click', async () => {
+      const text = document.getElementById(targetId).textContent;
+      await navigator.clipboard.writeText(text);
+      const orig = document.getElementById(btnId).textContent;
+      document.getElementById(btnId).textContent = 'Tersalin!';
+      setTimeout(() => {
+        document.getElementById(btnId).textContent = orig;
+      }, 1500);
+    });
+  }
+
+  setupCopy('copyNewBtn', 'newLicenseKey');
+  setupCopy('copyOldBtn', 'oldLicenseKey');
+
+  // ============================================================
+  // AUTO-FILL EMAIL (kalau pernah trial dari browser ini)
+  // ============================================================
+  const savedEmail = localStorage.getItem('trial_email');
+  if (savedEmail) {
+    document.getElementById('email').value = savedEmail;
+  }
+
+  // ============================================================
+  // AUTO-FILL MACHINE ID (kalau extension terpasang)
+  // ============================================================
+  const params = new URLSearchParams(location.search);
+  const midFromExt = params.get('mid');
+  if (midFromExt) {
+    document.getElementById('machineId').value = midFromExt;
+  }
 </script>
 </body>
 </html>
