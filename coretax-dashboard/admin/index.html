@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin — Coretax Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #0f172a;
+  --paper: #1e293b;
+  --paper-soft: #334155;
+  --border: #334155;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --primary: #3b82f6;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+/* Login Screen */
+.login-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+.login-box {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px 32px;
+  width: 100%;
+  max-width: 420px;
+}
+.login-box h1 { font-size: 1.5rem; margin-bottom: 8px; }
+.login-box p { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
+.login-box input {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  margin-bottom: 16px;
+}
+.login-box input:focus { outline: none; border-color: var(--primary); }
+.login-box button {
+  width: 100%;
+  padding: 13px;
+  background: var(--primary);
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.login-box button:hover { opacity: 0.9; }
+.login-error { color: var(--danger); font-size: 0.85rem; margin-top: 12px; }
+
+/* Dashboard */
+.dashboard { display: none; }
+.dashboard.active { display: block; }
+.topbar {
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.topbar .brand { font-weight: 900; font-size: 1rem; }
+.topbar .brand span { color: var(--muted); font-weight: 400; font-size: 0.85rem; margin-left: 8px; }
+.logout-btn {
+  padding: 8px 16px;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+/* Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+}
+.stat-card .label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 8px; }
+.stat-card .value { font-size: 1.8rem; font-weight: 900; }
+.stat-card .value.green { color: var(--success); }
+.stat-card .value.blue { color: var(--primary); }
+.stat-card .value.warning { color: var(--warning); }
+
+/* Tabs */
+.tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+.tab-btn {
+  padding: 12px 20px;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+/* Table */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.toolbar { display: flex; gap: 12px; margin-bottom: 16px; }
+.toolbar input {
+  flex: 1;
+  padding: 10px 14px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.toolbar button {
+  padding: 10px 20px;
+  background: var(--primary);
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.table-wrap {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+thead { background: var(--bg); }
+th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+th { font-weight: 700; font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+tr:hover { background: var(--paper-soft); }
+tr:last-child td { border-bottom: 0; }
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.badge-green { background: rgba(16,185,129,0.15); color: var(--success); }
+.badge-red { background: rgba(239,68,68,0.15); color: var(--danger); }
+.badge-blue { background: rgba(59,130,246,0.15); color: var(--primary); }
+.badge-gray { background: rgba(148,163,184,0.15); color: var(--muted); }
+.badge-warning { background: rgba(245,158,11,0.15); color: var(--warning); }
+
+.actions { display: flex; gap: 6px; }
+.actions button {
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--paper-soft);
+  color: var(--text);
+  font-size: 0.72rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+.actions button:hover { background: var(--primary); border-color: var(--primary); color: white; }
+.actions button.danger:hover { background: var(--danger); border-color: var(--danger); }
+
+.mono { font-family: Consolas, monospace; font-size: 0.75rem; }
+.truncate { max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.empty { padding: 40px; text-align: center; color: var(--muted); font-size: 0.9rem; }
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 14px 20px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  z-index: 100;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { border-color: var(--success); }
+.toast.error { border-color: var(--danger); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <h1>🔐 Admin Panel</h1>
+    <p>Coretax PDF Toolkit — License Management</p>
+    <input type="password" id="password" placeholder="Password admin" autofocus />
+    <button id="loginBtn">Login</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <div class="topbar">
+    <div class="brand">⚙️ Admin Panel <span>Coretax Toolkit</span></div>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </div>
+
+  <div class="container">
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Total License</div>
+        <div class="value blue" id="statTotal">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">License Aktif</div>
+        <div class="value green" id="statActive">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Trial</div>
+        <div class="value blue" id="statTrial">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Trial Aktif</div>
+        <div class="value warning" id="statTrialActive">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Download</div>
+        <div class="value green" id="statDownloads">0</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="licenses">Licenses</button>
+      <button class="tab-btn" data-tab="trials">Trials</button>
+    </div>
+
+    <!-- LICENSES -->
+    <div class="tab-panel active" id="panel-licenses">
+      <div class="toolbar">
+        <input type="text" id="searchLicenses" placeholder="Cari email, machine ID, atau license key..." />
+        <button onclick="loadLicenses()">🔄 Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Tier</th>
+              <th>Machine ID</th>
+              <th>Expired</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="licensesBody"></tbody>
+        </table>
+        <div class="empty" id="licensesEmpty" style="display:none">Belum ada license.</div>
+      </div>
+    </div>
+
+    <!-- TRIALS -->
+    <div class="tab-panel" id="panel-trials">
+      <div class="toolbar">
+        <input type="text" id="searchTrials" placeholder="Cari email atau machine ID..." />
+        <button onclick="loadTrials()">🔄 Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Nama</th>
+              <th>Machine ID</th>
+              <th>Expired</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="trialsBody"></tbody>
+        </table>
+        <div class="empty" id="trialsEmpty" style="display:none">Belum ada trial.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API_URL = "https://coretax-backend-production.up.railway.app";
+
+let TOKEN = localStorage.getItem("admin_token") || "";
+
+// ============ LOGIN ============
+document.getElementById("loginBtn").addEventListener("click", doLogin);
+document.getElementById("password").addEventListener("keydown", e => {
+  if (e.key === "Enter") doLogin();
+});
+
+async function doLogin() {
+  const pw = document.getElementById("password").value;
+  const err = document.getElementById("loginError");
+  err.textContent = "";
+
+  try {
+    const res = await fetch(API_URL + "/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: pw })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Login gagal");
+
+    TOKEN = data.token;
+    localStorage.setItem("admin_token", TOKEN);
+    showDashboard();
+  } catch (e) {
+    err.textContent = e.message;
+  }
+}
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("admin_token");
+  TOKEN = "";
+  location.reload();
+});
+
+function showDashboard() {
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("dashboard").classList.add("active");
+  loadStats();
+  loadLicenses();
+}
+
+// ============ API HELPER ============
+async function api(path, options = {}) {
+  const headers = {
+    "Authorization": "Bearer " + TOKEN,
+    ...(options.headers || {})
+  };
+  if (options.body) headers["Content-Type"] = "application/json";
+
+  const res = await fetch(API_URL + path, { ...options, headers });
+  if (res.status === 401) {
+    localStorage.removeItem("admin_token");
+    location.reload();
+    return;
+  }
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || "Error");
+  return data;
+}
+
+// ============ STATS ============
+async function loadStats() {
+  try {
+    const s = await api("/api/admin/stats");
+    document.getElementById("statTotal").textContent = s.total_licenses;
+    document.getElementById("statActive").textContent = s.active_licenses;
+    document.getElementById("statTrial").textContent = s.total_trials;
+    document.getElementById("statTrialActive").textContent = s.active_trials;
+    document.getElementById("statDownloads").textContent = s.total_downloads;
+  } catch (e) { toast(e.message, "error"); }
+}
+
+// ============ LICENSES ============
+async function loadLicenses() {
+  const search = document.getElementById("searchLicenses").value;
+  try {
+    const data = await api("/api/admin/licenses?search=" + encodeURIComponent(search));
+    const tbody = document.getElementById("licensesBody");
+    const empty = document.getElementById("licensesEmpty");
+
+    if (!data.licenses.length) {
+      tbody.innerHTML = "";
+      empty.style.display = "block";
+      return;
+    }
+    empty.style.display = "none";
+
+    tbody.innerHTML = data.licenses.map(l => {
+      const isExpired = l.expires_at && new Date(l.expires_at) < new Date();
+      const statusBadge = !l.is_active
+        ? '<span class="badge badge-red">Revoked</span>'
+        : isExpired
+        ? '<span class="badge badge-warning">Expired</span>'
+        : '<span class="badge badge-green">Aktif</span>';
+
+      const expiredDate = l.expires_at
+        ? new Date(l.expires_at).toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" })
+        : "-";
+
+      return `
+        <tr>
+          <td>
+            <div><strong>${escapeHtml(l.customer_name || "-")}</strong></div>
+            <div style="color:var(--muted);font-size:0.78rem">${escapeHtml(l.customer_email || "-")}</div>
+          </td>
+          <td><span class="badge badge-blue">${(l.tier || "pro").toUpperCase()}</span></td>
+          <td class="mono truncate" title="${l.machine_id}">${(l.machine_id || "-").substring(0, 12)}...</td>
+          <td>${expiredDate}</td>
+          <td>${statusBadge}</td>
+          <td>
+            <div class="actions">
+              ${l.is_active
+                ? `<button class="danger" onclick="revokeLicense(${l.id})">Revoke</button>`
+                : `<button onclick="reactivateLicense(${l.id})">Aktifkan</button>`}
+              <button onclick="extendLicense(${l.id})">+30d</button>
+              <button class="danger" onclick="deleteLicense(${l.id})">Hapus</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  } catch (e) { toast(e.message, "error"); }
+}
+
+async function revokeLicense(id) {
+  if (!confirm("Revoke license ini? User gak bisa pakai lagi.")) return;
+  try {
+    await api("/api/admin/license/revoke", {
+      method: "POST",
+      body: JSON.stringify({ license_id: id })
+    });
+    toast("License di-revoke", "success");
+    loadLicenses();
+    loadStats();
+  } catch (e) { toast(e.message, "error"); }
+}
+
+async function reactivateLicense(id) {
+  try {
+    await api("/api/admin/license/reactivate", {
+      method: "POST",
+      body: JSON.stringify({ license_id: id })
+    });
+    toast("License di-reactivate", "success");
+    loadLicenses();
+    loadStats();
+  } catch (e) { toast(e.message, "error"); }
+}
+
+async function extendLicense(id) {
+  const days = prompt("Extend berapa hari?", "30");
+  if (!days) return;
+  try {
+    await api("/api/admin/license/extend", {
+      method: "POST",
+      body: JSON.stringify({ license_id: id, days: parseInt(days) })
+    });
+    toast(`Extended ${days} hari`, "success");
+    loadLicenses();
+  } catch (e) { toast(e.message, "error"); }
+}
+
+async function deleteLicense(id) {
+  if (!confirm("HAPUS PERMANEN? Gak bisa dibalikin!")) return;
+  try {
+    await api("/api/admin/license/" + id, { method: "DELETE" });
+    toast("License dihapus", "success");
+    loadLicenses();
+    loadStats();
+  } catch (e) { toast(e.message, "error"); }
+}
+
+// ============ TRIALS ============
+async function loadTrials() {
+  const search = document.getElementById("searchTrials").value;
+  try {
+    const data = await api("/api/admin/trials?search=" + encodeURIComponent(search));
+    const tbody = document.getElementById("trialsBody");
+    const empty = document.getElementById("trialsEmpty");
+
+    if (!data.trials.length) {
+      tbody.innerHTML = "";
+      empty.style.display = "block";
+      return;
+    }
+    empty.style.display = "none";
+
+    tbody.innerHTML = data.trials.map(t => {
+      const isExpired = t.expires_at && new Date(t.expires_at) < new Date();
+      const statusBadge = isExpired
+        ? '<span class="badge badge-gray">Expired</span>'
+        : '<span class="badge badge-green">Aktif</span>';
+
+      const expiredDate = t.expires_at
+        ? new Date(t.expires_at).toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" })
+        : "-";
+
+      return `
+        <tr>
+          <td>${escapeHtml(t.email || "-")}</td>
+          <td>${escapeHtml(t.name || "-")}</td>
+          <td class="mono truncate" title="${t.machine_id}">${(t.machine_id || "-").substring(0, 12)}...</td>
+          <td>${expiredDate}</td>
+          <td>${statusBadge}</td>
+        </tr>
+      `;
+    }).join("");
+  } catch (e) { toast(e.message, "error"); }
+}
+
+// ============ TABS ============
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b === btn));
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + tab));
+    if (tab === "licenses") loadLicenses();
+    if (tab === "trials") loadTrials();
+  });
+});
+
+// Search on enter
+document.getElementById("searchLicenses").addEventListener("keydown", e => { if (e.key === "Enter") loadLicenses(); });
+document.getElementById("searchTrials").addEventListener("keydown", e => { if (e.key === "Enter") loadTrials(); });
+
+// ============ HELPERS ============
+function escapeHtml(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+function toast(msg, type = "success") {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast show " + type;
+  setTimeout(() => el.classList.remove("show"), 2500);
+}
+
+// ============ AUTO-INIT ============
+if (TOKEN) {
+  showDashboard();
+}
