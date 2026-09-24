@@ -38,8 +38,14 @@
   const params = new URLSearchParams(location.search);
   const mid = params.get('mid');
   if (mid) document.getElementById('machineId').value = mid;
-  const savedKey = localStorage.getItem('license_key');
-  if (savedKey) document.getElementById('licenseKey').value = savedKey;
+    // Auto-fill dari URL param (dari extension)
+  const keyFromExt = params.get('key');
+  if (keyFromExt) {
+    document.getElementById('licenseKey').value = keyFromExt;
+  } else {
+    const savedKey = localStorage.getItem('license_key');
+    if (savedKey) document.getElementById('licenseKey').value = savedKey;
+  }
 
   document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
